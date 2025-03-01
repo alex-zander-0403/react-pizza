@@ -1,29 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function PizzaCard() {
   //
+  const [pizzaCount, setPizzaCount] = useState(0);
+
+  // функция добавления пиццы
+  const onClickAdd = () => {
+    setPizzaCount(pizzaCount + 1);
+  };
+
+  //
   return (
-    <div class="pizza-card">
+    <div className="pizza-card">
       <img
-        class="pizza-card__image"
+        className="pizza-card__image"
         src="https://media.dodostatic.net/image/r:292x292/11ee7d612fc7b7fca5be822752bee1e5.jpg"
         alt="Pizza"
       />
-      <h4 class="pizza-card__title">Чизбургер-пицца</h4>
-      <div class="pizza-card__selector">
+      <h4 className="pizza-card__title">Чизбургер-пицца</h4>
+      <div className="pizza-card__selector">
         <ul>
-          <li class="active">тонкое</li>
+          <li className="active">тонкое</li>
           <li>традиционное</li>
         </ul>
         <ul>
-          <li class="active">26 см.</li>
+          <li className="active">26 см.</li>
           <li>30 см.</li>
           <li>40 см.</li>
         </ul>
       </div>
-      <div class="pizza-card__bottom">
-        <div class="pizza-card__price">от 395 ₽</div>
-        <div class="button button--outline button--add">
+      <div className="pizza-card__bottom">
+        <div className="pizza-card__price">от 395 ₽</div>
+        <button
+          onClick={onClickAdd}
+          className="button button--outline button--add"
+        >
           <svg
             width="12"
             height="12"
@@ -37,8 +48,8 @@ export default function PizzaCard() {
             />
           </svg>
           <span>Добавить</span>
-          <i>2</i>
-        </div>
+          <i>{pizzaCount}</i>
+        </button>
       </div>
     </div>
   );
