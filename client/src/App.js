@@ -4,12 +4,14 @@ import Header from "./comnponents/ui/Header";
 import Categories from "./comnponents/ui/Categories";
 import Sort from "./comnponents/ui/Sort";
 import PizzaCard from "./comnponents/ui/PizzaCard";
+import pizzasArray from "./assets/pizzasArray.json";
 //
 import "./scss/app.scss";
 
 //
 function App() {
   //
+  console.log(pizzasArray);
 
   //
   return (
@@ -28,7 +30,12 @@ function App() {
           <h2 className="content__title">Все пиццы</h2>
           <div className="content__items">
             {/*  */}
-            <PizzaCard />
+            {/* <PizzaCard /> */}
+
+            {pizzasArray.map((el) => (
+              <PizzaCard key={el.id} el={el} />
+            ))}
+
             {/*  */}
           </div>
         </div>

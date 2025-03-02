@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 
-export default function PizzaCard() {
+export default function PizzaCard({ el }) {
   //
-  const [pizzaCount, setPizzaCount] = useState(0);
+  const [pizzaCount, setPizzaCount] = useState(0); // состояние количества пицц
+  const [activeType, setActiveType] = useState(0);
+  const [activeSize, setActiveSize] = useState(0);
+
+  const typeNames = ["тонкое", "традиционное"];
 
   // функция добавления пиццы
   const onClickAdd = () => {
@@ -12,25 +16,35 @@ export default function PizzaCard() {
   //
   return (
     <div className="pizza-card">
-      <img
-        className="pizza-card__image"
-        src="https://media.dodostatic.net/image/r:292x292/11ee7d612fc7b7fca5be822752bee1e5.jpg"
-        alt="Pizza"
-      />
-      <h4 className="pizza-card__title">Чизбургер-пицца</h4>
+      <img className="pizza-card__image" src={el.imageUrl} alt="Pizza" />
+      <h4 className="pizza-card__title">{el.title}</h4>
       <div className="pizza-card__selector">
+        {/*  */}
         <ul>
-          <li className="active">тонкое</li>
-          <li>традиционное</li>
+          {el.types.map((type, i) => (
+            <li
+              className={activeType === i ? "active" : ""}
+              onClick={() => setActiveType(i)}
+            >
+              {typeNames[type]}
+            </li>
+          ))}
         </ul>
+        {/*  */}
         <ul>
-          <li className="active">26 см.</li>
-          <li>30 см.</li>
-          <li>40 см.</li>
+          {el.sizes.map((size, i) => (
+            <li
+              className={activeSize === i ? "active" : ""}
+              onClick={() => setActiveSize(i)}
+            >
+              {size} см
+            </li>
+          ))}
         </ul>
+        {/*  */}
       </div>
       <div className="pizza-card__bottom">
-        <div className="pizza-card__price">от 395 ₽</div>
+        <div className="pizza-card__price">от {el.price} ₽</div>
         <button
           onClick={onClickAdd}
           className="button button--outline button--add"
