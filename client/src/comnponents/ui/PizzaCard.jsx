@@ -24,6 +24,7 @@ export default function PizzaCard({ el }) {
           {el.types.map((type, i) => (
             <li
               className={activeType === i ? "active" : ""}
+              key={i}
               onClick={() => setActiveType(i)}
             >
               {typeNames[type]}
@@ -35,6 +36,7 @@ export default function PizzaCard({ el }) {
           {el.sizes.map((size, i) => (
             <li
               className={activeSize === i ? "active" : ""}
+              key={i}
               onClick={() => setActiveSize(i)}
             >
               {size} см

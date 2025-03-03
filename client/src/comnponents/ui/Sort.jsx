@@ -1,6 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function Sort() {
+  //
+  const [openSort, setOpenSort] = useState(false); // popup меню вкл/выкл
+  const [selected, setSelected] = useState(0); // выбранный элемент списка
+  //
+  const sortList = ["популярности", "цене", "алфавиту"]; // список элементов списка сортировки
+
+  // функция по клику на элемент списка
+  const onClickListElement = (i) => {
+    setSelected(i);
+    setOpenSort(false);
+  };
+
+  //
   return (
     <div className="sort">
       <div className="sort__label">
@@ -17,15 +30,27 @@ export default function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>популярности</span>
+        <span onClick={() => setOpenSort(!openSort)}>{sortList[selected]}</span>
       </div>
-      <div className="sort__popup">
-        <ul>
-          <li className="active">популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
-        </ul>
-      </div>
+      {openSort && (
+        <div className="sort__popup">
+          {/*  */}
+          {/*  */}
+          <ul>
+            {sortList.map((el, i) => (
+              <li
+                className={selected === i ? "active" : ""}
+                key={i}
+                onClick={() => onClickListElement(i)}
+              >
+                {el}
+              </li>
+            ))}
+          </ul>
+          {/*  */}
+          {/*  */}
+        </div>
+      )}
     </div>
   );
 }

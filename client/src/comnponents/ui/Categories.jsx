@@ -23,11 +23,11 @@ export default function Categories() {
   return (
     <div className="categories">
       <ul>
-        {/* <li onClick={() => setCategory(0)} className={activeCategory === 0 ? "active" : ""}>Все</li> */}
         {categories.map((el, i) => (
           <li
-            onClick={() => setCategory(i)}
             className={activeCategory === i ? "active" : ""}
+            key={i}
+            onClick={() => setCategory(i)}
           >
             {el}
           </li>

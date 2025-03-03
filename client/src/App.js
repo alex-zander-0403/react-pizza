@@ -11,7 +11,7 @@ import "./scss/app.scss";
 //
 function App() {
   //
-  console.log(pizzasArray);
+  // console.log(pizzasArray);
 
   //
   return (
@@ -23,19 +23,17 @@ function App() {
         <div className="container">
           <div className="content__top">
             {/*  */}
-            <Categories />
+            {/* <Categories /> */}
             {/*  */}
             <Sort />
+            {/*  */}
           </div>
           <h2 className="content__title">Все пиццы</h2>
           <div className="content__items">
             {/*  */}
-            {/* <PizzaCard /> */}
-
             {pizzasArray.map((el) => (
               <PizzaCard key={el.id} el={el} />
             ))}
-
             {/*  */}
           </div>
         </div>
