@@ -91,6 +91,12 @@ body {
 }
 
 .cart {
+
+  .content__items {
+    display: flex;
+    flex-direction: column;
+  }
+
   &__top {
     display: flex;
     justify-content: space-between;

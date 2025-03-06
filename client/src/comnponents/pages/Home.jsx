@@ -17,32 +17,38 @@ export default function Home() {
       .then((res) => res.json())
       .then((json) => {
         setPizzasArr(json);
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
+        setIsLoading(false);
+        // setTimeout(() => {
+        //   setIsLoading(false);
+        // }, 500);
       });
   }
 
   //
   useEffect(() => {
     getAllItems();
+    window.scroll(0, 0); // скролл в начало
   }, []);
+
+  //
   return (
     <>
-      <div className="content__top">
-        {/*  */}
-        <Categories />
-        {/*  */}
-        <Sort />
-        {/*  */}
-      </div>
-      <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">
-        {/*  */}
-        {isLoading
-          ? [...new Array(9)].map((el, i) => <PizzaCardSkeleton key={i} />)
-          : pizzasArr.map((el) => <PizzaCard key={el.id} el={el} />)}
-        {/*  */}
+      <div className="container">
+        <div className="content__top">
+          {/*  */}
+          <Categories />
+          {/*  */}
+          <Sort />
+          {/*  */}
+        </div>
+        <h2 className="content__title">Все пиццы</h2>
+        <div className="content__items">
+          {/*  */}
+          {isLoading
+            ? [...new Array(9)].map((el, i) => <PizzaCardSkeleton key={i} />)
+            : pizzasArr.map((el) => <PizzaCard key={el.id} el={el} />)}
+          {/*  */}
+        </div>
       </div>
     </>
   );
