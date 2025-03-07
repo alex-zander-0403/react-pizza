@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 
-export default function Sort() {
+export default function Sort({ value, onClickType }) {
   //
   const [openSort, setOpenSort] = useState(false); // popup меню вкл/выкл
-  const [selected, setSelected] = useState(0); // выбранный элемент списка
-  //
-  const sortList = ["популярности", "цене", "алфавиту"]; // список элементов списка сортировки
+  const sortList = [
+    { name: "популярности (убывание)", sortProperty: "-rating" },
+    { name: "популярности (возрастание)", sortProperty: "rating" },
+    { name: "цене (убывание)", sortProperty: "-price" },
+    { name: "цене (возрастание)", sortProperty: "price" },
+    { name: "алфавиту (убывание)", sortProperty: "-title" },
+    { name: "алфавиту (возрастание)", sortProperty: "title" },
+  ]; // список элементов списка сортировки
+
+  // const chosenType = sortList[sortType].name; // актуальная сортировка
 
   // функция по клику на элемент списка
   const onClickListElement = (i) => {
-    setSelected(i);
+    onClickType(i);
     setOpenSort(false);
   };
 
@@ -30,25 +37,25 @@ export default function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpenSort(!openSort)}>{sortList[selected]}</span>
+        <span onClick={() => setOpenSort(!openSort)}>{value.name}</span>
       </div>
       {openSort && (
         <div className="sort__popup">
-          {/*  */}
-          {/*  */}
           <ul>
-            {sortList.map((el, i) => (
+            {/* ============== */}
+            {sortList.map((obj, i) => (
               <li
-                className={selected === i ? "active" : ""}
+                className={
+                  value.sortProperty === obj.sortProperty ? "active" : ""
+                }
                 key={i}
-                onClick={() => onClickListElement(i)}
+                onClick={() => onClickListElement(obj)}
               >
-                {el}
+                {obj.name}
               </li>
             ))}
+            {/* ============== */}
           </ul>
-          {/*  */}
-          {/*  */}
         </div>
       )}
     </div>
