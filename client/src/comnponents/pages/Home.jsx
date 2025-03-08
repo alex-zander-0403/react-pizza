@@ -4,32 +4,27 @@ import Categories from "../ui/Categories";
 import Sort from "../ui/Sort";
 import PizzaCard from "../ui/PizzaCard";
 import PizzaCardSkeleton from "../ui/PizzaCardSkeleton";
+import Search from "../ui/Search/Search";
+import Pagination from "../Pagination/Pagination";
 
 //
-export default function Home() {
+//
+export default function Home({ searchValue, setSearchValue }) {
   //
   const [isLoading, setIsLoading] = useState(true);
   const [pizzasArr, setPizzasArr] = useState([]); // main массив пицц
-  //
+
   // выбранная категория по id
   const [categoryId, setCategoryId] = useState(0);
+
+  // текущая страница
+  const [currentPage, setCurrentPage] = useState(1);
+
   // тип сортировки
   const [sortType, setSortType] = useState({
     name: "популярности (убывание)",
     sortProperty: "-rating",
   });
-
-  console.log("----->", categoryId, sortType);
-
-  //
-  // получение main массив пицц
-  // function getAllItems() {}
-
-  // сортировка по категории
-  // https://67c6fc1ec19eb8753e78293c.mockapi.io/items?sortBy=category&order=asc
-
-  // поиск
-  // https://67c6fc1ec19eb8753e78293c.mockapi.io/items?search=Пепперони
 
   //
   useEffect(() => {
@@ -38,9 +33,11 @@ export default function Home() {
     const category = categoryId ? `category=${categoryId}` : "";
     const sortBy = sortType.sortProperty.replace("-", "");
     const order = sortType.sortProperty.includes("-") ? "desc" : "asc";
+    const search = searchValue ? `&search=${searchValue}` : "";
+
     //
     fetch(
-      `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}`
+      `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
     )
       .then((res) => res.json())
       .then((json) => {
@@ -48,7 +45,24 @@ export default function Home() {
         setIsLoading(false);
       });
     window.scroll(0, 0); // скролл в начало
-  }, [categoryId, sortType]);
+  }, [categoryId, sortType, searchValue, currentPage]);
+
+  //
+  const pizzas = pizzasArr
+    .filter((el) => {
+      if (el.title.toLowerCase().includes(searchValue.toLowerCase())) {
+        return true;
+      }
+      return false;
+    })
+    .map((el) => <PizzaCard key={el.id} el={el} />);
+
+  //
+  const skeletons = [...new Array(9)].map((el, i) => (
+    <PizzaCardSkeleton key={i} />
+  ));
+
+  console.log(currentPage);
 
   //
   return (
@@ -64,14 +78,16 @@ export default function Home() {
           <Sort value={sortType} onClickType={(i) => setSortType(i)} />
           {/* ----- */}
         </div>
-        <h2 className="content__title">Все пиццы</h2>
+        <div className="content__header">
+          <h2 className="content__title">Все пиццы</h2>
+          <Search searchValue={searchValue} setSearchValue={setSearchValue} />
+        </div>
         <div className="content__items">
           {/*  */}
-          {isLoading
-            ? [...new Array(9)].map((el, i) => <PizzaCardSkeleton key={i} />)
-            : pizzasArr.map((el) => <PizzaCard key={el.id} el={el} />)}
+          {isLoading ? skeletons : pizzas}
           {/*  */}
         </div>
+        <Pagination onChangePage={(num) => setCurrentPage(num)} />
       </div>
     </>
   );

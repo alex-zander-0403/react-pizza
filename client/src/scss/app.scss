@@ -21,13 +21,25 @@ body {
   }
 }
 
+.content__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media (max-width: 768px) {
+    margin-top: 20px;
+    flex-direction: column-reverse;
+  }
+}
+
 .content {
-  padding: 40px 0;
+  &__header {
+    padding: 20px;
+  }
 
   &__title {
     font-weight: 800;
     font-size: 38px;
-    margin-top: 60px;
+    margin-top: 40px;
     margin-bottom: 40px;
   }
 
@@ -91,7 +103,6 @@ body {
 }
 
 .cart {
-
   .content__items {
     display: flex;
     flex-direction: column;
