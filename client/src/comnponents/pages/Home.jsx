@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 //
 import Categories from "../ui/Categories";
 import Sort from "../ui/Sort";
@@ -6,10 +6,13 @@ import PizzaCard from "../ui/PizzaCard";
 import PizzaCardSkeleton from "../ui/PizzaCardSkeleton";
 import Search from "../ui/Search/Search";
 import Pagination from "../Pagination/Pagination";
+import { SearchContext } from "../../App";
 
 //
 //
-export default function Home({ searchValue, setSearchValue }) {
+export default function Home() {
+  //
+  const { searchValue, setSearchValue } = useContext(SearchContext);
   //
   const [isLoading, setIsLoading] = useState(true);
   const [pizzasArr, setPizzasArr] = useState([]); // main массив пицц
@@ -37,7 +40,7 @@ export default function Home({ searchValue, setSearchValue }) {
 
     //
     fetch(
-      `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
+      `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?page=${currentPage}&limit=8&${category}&sortBy=${sortBy}&order=${order}${search}`
     )
       .then((res) => res.json())
       .then((json) => {
@@ -62,7 +65,7 @@ export default function Home({ searchValue, setSearchValue }) {
     <PizzaCardSkeleton key={i} />
   ));
 
-  console.log(currentPage);
+  // console.log(currentPage);
 
   //
   return (
