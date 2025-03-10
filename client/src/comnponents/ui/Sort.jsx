@@ -1,22 +1,33 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setSort } from "../../redux/slices/filterSlice";
 
-export default function Sort({ value, onClickType }) {
+//
+//
+const sortList = [
+  { name: "популярности (убывание)", sortProperty: "-rating" },
+  { name: "популярности (возрастание)", sortProperty: "rating" },
+  { name: "цене (убывание)", sortProperty: "-price" },
+  { name: "цене (возрастание)", sortProperty: "price" },
+  { name: "алфавиту (убывание)", sortProperty: "-title" },
+  { name: "алфавиту (возрастание)", sortProperty: "title" },
+]; // список элементов списка сортировки
+
+//
+//
+export default function Sort() {
+  //
+  const dispatch = useDispatch();
+  const sort = useSelector((state) => state.filterSlice.sort);
+
   //
   const [openSort, setOpenSort] = useState(false); // popup меню вкл/выкл
-  const sortList = [
-    { name: "популярности (убывание)", sortProperty: "-rating" },
-    { name: "популярности (возрастание)", sortProperty: "rating" },
-    { name: "цене (убывание)", sortProperty: "-price" },
-    { name: "цене (возрастание)", sortProperty: "price" },
-    { name: "алфавиту (убывание)", sortProperty: "-title" },
-    { name: "алфавиту (возрастание)", sortProperty: "title" },
-  ]; // список элементов списка сортировки
 
   // const chosenType = sortList[sortType].name; // актуальная сортировка
 
   // функция по клику на элемент списка
-  const onClickListElement = (i) => {
-    onClickType(i);
+  const onClickListElement = (obj) => {
+    dispatch(setSort(obj));
     setOpenSort(false);
   };
 
@@ -37,7 +48,7 @@ export default function Sort({ value, onClickType }) {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpenSort(!openSort)}>{value.name}</span>
+        <span onClick={() => setOpenSort(!openSort)}>{sort.name}</span> {/*  */}
       </div>
       {openSort && (
         <div className="sort__popup">
@@ -46,7 +57,7 @@ export default function Sort({ value, onClickType }) {
             {sortList.map((obj, i) => (
               <li
                 className={
-                  value.sortProperty === obj.sortProperty ? "active" : ""
+                  sort.sortProperty === obj.sortProperty ? "active" : "" /*  */
                 }
                 key={i}
                 onClick={() => onClickListElement(obj)}

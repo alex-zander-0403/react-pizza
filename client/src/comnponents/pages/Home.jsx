@@ -20,14 +20,15 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [pizzasArr, setPizzasArr] = useState([]); // main массив пицц
 
-  //
+  // текущая страница
+  const [currentPage, setCurrentPage] = useState(1);
 
   // --------------------------------------
 
-  // выбранная категория по id
-  // const [categoryId, setCategoryId] = useState(0);
+  // const categoryId = useSelector((state) => state.filterSlice.categoryId);
+  // const sortType = useSelector((state) => state.filterSlice.sort.sortProperty);
 
-  const categoryId = useSelector((state) => state.filterSlice.categoryId);
+  const { categoryId, sort } = useSelector((state) => state.filterSlice);
 
   //
   const dispatch = useDispatch();
@@ -36,24 +37,13 @@ export default function Home() {
     dispatch(setCategoryId(id));
   };
 
-  // --------------------------------------
-
-  // текущая страница
-  const [currentPage, setCurrentPage] = useState(1);
-
-  // тип сортировки
-  const [sortType, setSortType] = useState({
-    name: "популярности (убывание)",
-    sortProperty: "-rating",
-  });
-
   //
   useEffect(() => {
     setIsLoading(true);
     //
     const category = categoryId ? `category=${categoryId}` : "";
-    const sortBy = sortType.sortProperty.replace("-", "");
-    const order = sortType.sortProperty.includes("-") ? "desc" : "asc";
+    const sortBy = sort.sortProperty.replace("-", ""); //
+    const order = sort.sortProperty.includes("-") ? "desc" : "asc"; //
     const search = searchValue ? `&search=${searchValue}` : "";
 
     //
@@ -66,7 +56,7 @@ export default function Home() {
         setIsLoading(false);
       });
     window.scroll(0, 0); // скролл в начало
-  }, [categoryId, sortType, searchValue, currentPage]);
+  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   //
   const pizzas = pizzasArr
@@ -95,7 +85,8 @@ export default function Home() {
             onChangeCategory={onChangeCategory}
           />
           {/* ----- */}
-          <Sort value={sortType} onClickType={(i) => setSortType(i)} />
+          {/* <Sort value={sortType} onClickType={(i) => setSortType(i)} /> */}
+          <Sort />
           {/* ----- */}
         </div>
         <div className="content__header">
