@@ -1,6 +1,11 @@
 import React, { createContext, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 //
+// useSelector == useContext
+// useDispatch == сделай action
+// import { useSelector, useDispatch } from 'react-redux'
+// import { decrement, increment } from './counterSlice'
+//
 import Header from "./comnponents/ui/Header";
 import Home from "./comnponents/pages/Home";
 import Cart from "./comnponents/pages/Cart";

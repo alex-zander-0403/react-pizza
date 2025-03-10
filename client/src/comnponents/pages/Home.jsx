@@ -1,4 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
+import { SearchContext } from "../../App";
+import { useSelector, useDispatch } from "react-redux";
+//
+import { setCategoryId } from "../../redux/slices/filterSlice";
 //
 import Categories from "../ui/Categories";
 import Sort from "../ui/Sort";
@@ -6,7 +10,6 @@ import PizzaCard from "../ui/PizzaCard";
 import PizzaCardSkeleton from "../ui/PizzaCardSkeleton";
 import Search from "../ui/Search/Search";
 import Pagination from "../Pagination/Pagination";
-import { SearchContext } from "../../App";
 
 //
 //
@@ -17,8 +20,23 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [pizzasArr, setPizzasArr] = useState([]); // main массив пицц
 
+  //
+
+  // --------------------------------------
+
   // выбранная категория по id
-  const [categoryId, setCategoryId] = useState(0);
+  // const [categoryId, setCategoryId] = useState(0);
+
+  const categoryId = useSelector((state) => state.filterSlice.categoryId);
+
+  //
+  const dispatch = useDispatch();
+
+  const onChangeCategory = (id) => {
+    dispatch(setCategoryId(id));
+  };
+
+  // --------------------------------------
 
   // текущая страница
   const [currentPage, setCurrentPage] = useState(1);
@@ -65,8 +83,6 @@ export default function Home() {
     <PizzaCardSkeleton key={i} />
   ));
 
-  // console.log(currentPage);
-
   //
   return (
     <>
@@ -75,7 +91,8 @@ export default function Home() {
           {/* ----- */}
           <Categories
             categoryId={categoryId}
-            onClickCategory={(i) => setCategoryId(i)}
+            // onChangeCategory={(i) => setCategoryId(i)}
+            onChangeCategory={onChangeCategory}
           />
           {/* ----- */}
           <Sort value={sortType} onClickType={(i) => setSortType(i)} />
