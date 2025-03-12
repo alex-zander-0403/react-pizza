@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useContext, useRef } from "react";
+import { SearchContext } from "../../../App";
 //
 import styles from "./Search.module.scss";
 
 //
-const Search = ({ searchValue, setSearchValue }) => {
+//
+export default function Search() {
+  //
+  const { searchValue, setSearchValue } = useContext(SearchContext);
+
+  const inputRef = useRef();
+
+  const onClickClear = () => {
+    setSearchValue("");
+    inputRef.current.focus();
+  };
+
+  //
+  //
   return (
     <div className={styles.root}>
       <svg
@@ -22,13 +36,14 @@ const Search = ({ searchValue, setSearchValue }) => {
         <line x1="21" x2="16.65" y1="21" y2="16.65" />
       </svg>
       <input
+        ref={inputRef}
         className={styles.input}
         value={searchValue}
         onChange={(event) => setSearchValue(event.target.value)}
         placeholder="поиск"
       />
       {searchValue && (
-        <div className={styles.clear} onClick={() => setSearchValue("")}>
+        <div className={styles.clear} onClick={onClickClear}>
           <svg
             fill="none"
             height="24"
@@ -47,7 +62,7 @@ const Search = ({ searchValue, setSearchValue }) => {
       )}
     </div>
   );
-};
+}
 
 //
-export default Search;
+// export default Search;

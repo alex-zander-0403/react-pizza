@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SearchContext } from "../../App";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 //
 import { setCategoryId } from "../../redux/slices/filterSlice";
 //
@@ -15,19 +16,16 @@ import Pagination from "../Pagination/Pagination";
 //
 export default function Home() {
   //
-  const { searchValue, setSearchValue } = useContext(SearchContext);
+  const { searchValue } = useContext(SearchContext);
   //
-  const [isLoading, setIsLoading] = useState(true);
   const [pizzasArr, setPizzasArr] = useState([]); // main массив пицц
-
-  // текущая страница
-  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true); // загрузка?
+  const [currentPage, setCurrentPage] = useState(1); // страница
 
   // --------------------------------------
 
   // const categoryId = useSelector((state) => state.filterSlice.categoryId);
   // const sortType = useSelector((state) => state.filterSlice.sort.sortProperty);
-
   const { categoryId, sort } = useSelector((state) => state.filterSlice);
 
   //
@@ -41,20 +39,18 @@ export default function Home() {
   useEffect(() => {
     setIsLoading(true);
     //
-    const category = categoryId ? `category=${categoryId}` : "";
+    const category = categoryId > 0 ? `&category=${categoryId}` : "";
     const sortBy = sort.sortProperty.replace("-", ""); //
     const order = sort.sortProperty.includes("-") ? "desc" : "asc"; //
     const search = searchValue ? `&search=${searchValue}` : "";
 
-    //
-    fetch(
-      `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?page=${currentPage}&limit=8&${category}&sortBy=${sortBy}&order=${order}${search}`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        setPizzasArr(json);
-        setIsLoading(false);
-      });
+    axios(
+      `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?page=${currentPage}&limit=8&sortBy=${sortBy}&order=${order}${category}${search}`
+    ).then((res) => {
+      setPizzasArr(res.data);
+      setIsLoading(false);
+    });
+
     window.scroll(0, 0); // скролл в начало
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
@@ -91,7 +87,7 @@ export default function Home() {
         </div>
         <div className="content__header">
           <h2 className="content__title">Все пиццы</h2>
-          <Search searchValue={searchValue} setSearchValue={setSearchValue} />
+          <Search />
         </div>
         <div className="content__items">
           {/*  */}
