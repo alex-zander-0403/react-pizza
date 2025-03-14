@@ -3,7 +3,7 @@ import { SearchContext } from "../../App";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 //
-import { setCategoryId } from "../../redux/slices/filterSlice";
+import { setCategoryId, setCurrentPage } from "../../redux/slices/filterSlice";
 //
 import Categories from "../ui/Categories";
 import Sort from "../ui/Sort";
@@ -20,19 +20,25 @@ export default function Home() {
   //
   const [pizzasArr, setPizzasArr] = useState([]); // main массив пицц
   const [isLoading, setIsLoading] = useState(true); // загрузка?
-  const [currentPage, setCurrentPage] = useState(1); // страница
+  // const [currentPage, setCurrentPage] = useState(1); // страница
 
   // --------------------------------------
 
   // const categoryId = useSelector((state) => state.filterSlice.categoryId);
   // const sortType = useSelector((state) => state.filterSlice.sort.sortProperty);
-  const { categoryId, sort } = useSelector((state) => state.filterSlice);
+  const { categoryId, sort, currentPage } = useSelector(
+    (state) => state.filterSlice
+  );
 
   //
   const dispatch = useDispatch();
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
+  };
+
+  const onChangePage = (num) => {
+    dispatch(setCurrentPage(num));
   };
 
   //
@@ -44,15 +50,23 @@ export default function Home() {
     const order = sort.sortProperty.includes("-") ? "desc" : "asc"; //
     const search = searchValue ? `&search=${searchValue}` : "";
 
-    axios(
-      `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?page=${currentPage}&limit=8&sortBy=${sortBy}&order=${order}${category}${search}`
-    ).then((res) => {
-      setPizzasArr(res.data);
-      setIsLoading(false);
-    });
+    axios
+      .get(
+        `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?page=${currentPage}&limit=8&sortBy=${sortBy}&order=${order}${category}${search}`
+      )
+      .then((res) => {
+        setPizzasArr(res.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Ошибка при запросе данных:", error);
+        setIsLoading(false);
+      });
 
     window.scroll(0, 0); // скролл в начало
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
+
+  // console.log(categoryId, sort.sortProperty, searchValue, currentPage);
 
   //
   const pizzas = pizzasArr
@@ -94,7 +108,7 @@ export default function Home() {
           {isLoading ? skeletons : pizzas}
           {/*  */}
         </div>
-        <Pagination onChangePage={(num) => setCurrentPage(num)} />
+        <Pagination onChangePage={onChangePage} />
       </div>
     </>
   );

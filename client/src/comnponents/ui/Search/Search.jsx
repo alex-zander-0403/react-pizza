@@ -1,22 +1,39 @@
-import React, { useContext, useRef } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import { SearchContext } from "../../../App";
+import debounce from "lodash.debounce";
 //
 import styles from "./Search.module.scss";
 
 //
-//
 export default function Search() {
   //
-  const { searchValue, setSearchValue } = useContext(SearchContext);
+  const [localValue, setLocalValue] = useState("");
+  const { setSearchValue } = useContext(SearchContext);
 
   const inputRef = useRef();
 
+  // при изменении input меняем значение локально
+  const onChangeInput = (event) => {
+    const searchStr = event.target.value;
+    setLocalValue(searchStr);
+    updateSearchValue(searchStr);
+  };
+
+  // localValue передаем в main searchValue
+  const updateSearchValue = useCallback(
+    debounce((searchStr) => {
+      setSearchValue(searchStr);
+    }, 1000),
+    []
+  );
+
+  // очистка поиска
   const onClickClear = () => {
     setSearchValue("");
+    setLocalValue("");
     inputRef.current.focus();
   };
 
-  //
   //
   return (
     <div className={styles.root}>
@@ -38,11 +55,12 @@ export default function Search() {
       <input
         ref={inputRef}
         className={styles.input}
-        value={searchValue}
-        onChange={(event) => setSearchValue(event.target.value)}
+        value={localValue}
+        // onChange={(event) => setSearchValue(event.target.value)}
+        onChange={onChangeInput}
         placeholder="поиск"
       />
-      {searchValue && (
+      {localValue && (
         <div className={styles.clear} onClick={onClickClear}>
           <svg
             fill="none"
