@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setSort } from "../../redux/slices/filterSlice";
 
@@ -22,18 +22,35 @@ export default function Sort() {
 
   //
   const [openSort, setOpenSort] = useState(false); // popup меню вкл/выкл
+  const sortRef = useRef();
 
   // const chosenType = sortList[sortType].name; // актуальная сортировка
 
   // функция по клику на элемент списка
   const onClickListElement = (obj) => {
     dispatch(setSort(obj));
-    setOpenSort(false);
+    setOpenSort(false); 
   };
 
   //
+  useEffect(() => {
+    // закрыть popup окно по клику мимо
+    const onClickOutside = (event) => {
+      if (!event.composedPath().includes(sortRef.current)) {
+        setOpenSort(false);
+      }
+    };
+    // mount onClickOutside
+    document.body.addEventListener("click", onClickOutside);
+    // unmount onClickOutside
+    return () => {
+      document.body.removeEventListener("click", onClickOutside);
+    };
+  }, []);
+
+  //
   return (
-    <div className="sort">
+    <div className="sort" ref={sortRef}>
       <div className="sort__label">
         <svg
           width="10"

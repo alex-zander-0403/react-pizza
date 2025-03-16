@@ -1,16 +1,39 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem } from "../../redux/slices/cartSlice";
 
+//
+const typeNames = ["тонкое", "традиционное"];
+
+//
 export default function PizzaCard({ el }) {
   //
-  const [pizzaCount, setPizzaCount] = useState(0); // состояние количества пицц
+  // const [pizzaCount, setPizzaCount] = useState(0); // состояние количества пицц
   const [activeType, setActiveType] = useState(0);
   const [activeSize, setActiveSize] = useState(0);
 
-  const typeNames = ["тонкое", "традиционное"];
+  //
+  const dispatch = useDispatch();
 
-  // функция добавления пиццы
+  // находим item в с который el.id
+  const cartItem = useSelector((state) =>
+    state.cartSlice.items.find((obj) => obj.id === el.id)
+  );
+  // проверка cartItem
+  const addedItem = cartItem ? cartItem.count : 0;
+
+  //
   const onClickAdd = () => {
-    setPizzaCount(pizzaCount + 1);
+    // const item = { ...el, type: activeType, size: activeSize };
+    const item = {
+      id: el.id,
+      title: el.title,
+      imageUrl: el.imageUrl,
+      price: el.price,
+      type: typeNames[activeType],
+      size: el.sizes[activeSize],
+    };
+    dispatch(addItem(item));
   };
 
   //
@@ -65,7 +88,7 @@ export default function PizzaCard({ el }) {
               />
             </svg>
             <span>Добавить</span>
-            <i>{pizzaCount}</i>
+            {addedItem > 0 && <i>{addedItem}</i>}
           </button>
         </div>
       </div>

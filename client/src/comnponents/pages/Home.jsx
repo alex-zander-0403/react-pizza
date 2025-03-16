@@ -120,14 +120,6 @@ export default function Home() {
     isSearch.current = false;
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
-  // useEffect(() => {
-  //   window.scroll(0, 0); // скролл в начало
-  //   if (!isSearch.current) {
-  //     fetchPizzas();
-  //   }
-  //   isSearch.current = false;
-  // }, [categoryId, sort.sortProperty, searchValue, currentPage]);
-
   //
   const pizzas = pizzasArr
     .filter((el) => {
@@ -151,11 +143,9 @@ export default function Home() {
           {/* ----- */}
           <Categories
             categoryId={categoryId}
-            // onChangeCategory={(i) => setCategoryId(i)}
             onChangeCategory={onChangeCategory}
           />
           {/* ----- */}
-          {/* <Sort value={sortType} onClickType={(i) => setSortType(i)} /> */}
           <Sort />
           {/* ----- */}
         </div>

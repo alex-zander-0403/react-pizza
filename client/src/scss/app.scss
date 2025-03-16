@@ -331,13 +331,15 @@ body {
   }
 
   &--empty {
-    margin: 0 auto;
+    margin: 80px auto;
     width: 560px;
     text-align: center;
+    padding-bottom: 80px; // ---
 
     h2 {
+      font-weight: 700;
       font-size: 32px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
 
     p {
