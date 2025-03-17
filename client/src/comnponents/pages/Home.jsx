@@ -17,13 +17,16 @@ import PizzaCardSkeleton from "../ui/PizzaCardSkeleton";
 import Search from "../ui/Search/Search";
 import Pagination from "../Pagination/Pagination";
 import { useNavigate } from "react-router-dom";
+import { setItems } from "../../redux/slices/pizzaSlice";
 
 //
 //
 export default function Home() {
   //
-  const [pizzasArr, setPizzasArr] = useState([]); // main массив пицц
-  const [isLoading, setIsLoading] = useState(true); // загрузка?
+  // const [pizzasArr, setPizzasArr] = useState([]); // main массив пицц
+  const items = useSelector((state) => state.pizzaSlice.items);
+
+  const [isLoading, setIsLoading] = useState(true); // загрузка
   // const [currentPage, setCurrentPage] = useState(1); // страница
 
   const { searchValue } = useContext(SearchContext);
@@ -42,6 +45,8 @@ export default function Home() {
   );
 
   //
+
+  //
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
   };
@@ -51,26 +56,27 @@ export default function Home() {
   };
 
   //
-  const fetchPizzas = () => {
+  const fetchPizzas = async () => {
     setIsLoading(true);
-    //
+
     const category = categoryId > 0 ? `&category=${categoryId}` : "";
     const sortBy = sort.sortProperty.replace("-", ""); //
     const order = sort.sortProperty.includes("-") ? "desc" : "asc"; //
     const search = searchValue ? `&search=${searchValue}` : "";
 
-    axios
-      .get(
+    try {
+      const res = await axios.get(
         `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?page=${currentPage}&limit=8&sortBy=${sortBy}&order=${order}${category}${search}`
-      )
-      .then((res) => {
-        setPizzasArr(res.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Ошибка при запросе данных:", error);
-        setIsLoading(false);
-      });
+      );
+      // setPizzasArr(res.data);
+      dispatch(setItems(res.data));
+    } catch (error) {
+      console.error("Ошибка при запросе данных:", error);
+    } finally {
+      setIsLoading(false);
+    }
+
+    window.scrollTo(0, 0);
   };
 
   //
@@ -111,8 +117,6 @@ export default function Home() {
   //
   // 3 - Если был первый рендер, то запрашиваем пиццы
   useEffect(() => {
-    window.scrollTo(0, 0);
-
     if (!isSearch.current) {
       fetchPizzas();
     }
@@ -121,7 +125,7 @@ export default function Home() {
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   //
-  const pizzas = pizzasArr
+  const pizzas = items
     .filter((el) => {
       if (el.title.toLowerCase().includes(searchValue.toLowerCase())) {
         return true;
