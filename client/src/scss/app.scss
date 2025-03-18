@@ -32,6 +32,22 @@ body {
 }
 
 .content {
+  &__error-info {
+    padding: 100px;
+
+    h2 {
+      text-align: center;
+      // padding: 25px;
+      margin: 0 auto;
+      max-width: 720px;
+    }
+    p {
+      text-align: center;
+      font-size: 20px;
+      color: grey;
+    }
+  }
+
   &__header {
     padding: 20px;
   }

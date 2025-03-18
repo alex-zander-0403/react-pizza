@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { SearchContext } from "../../App";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 import qs from "qs";
 //
 import {
@@ -17,16 +16,16 @@ import PizzaCardSkeleton from "../ui/PizzaCardSkeleton";
 import Search from "../ui/Search/Search";
 import Pagination from "../Pagination/Pagination";
 import { useNavigate } from "react-router-dom";
-import { setItems } from "../../redux/slices/pizzaSlice";
+import { fetchPizzas } from "../../redux/slices/pizzaSlice";
 
 //
 //
 export default function Home() {
   //
   // const [pizzasArr, setPizzasArr] = useState([]); // main массив пицц
-  const items = useSelector((state) => state.pizzaSlice.items);
+  const { items, status } = useSelector((state) => state.pizzaSlice);
 
-  const [isLoading, setIsLoading] = useState(true); // загрузка
+  // const [isLoading, setIsLoading] = useState(true); // загрузка
   // const [currentPage, setCurrentPage] = useState(1); // страница
 
   const { searchValue } = useContext(SearchContext);
@@ -45,8 +44,6 @@ export default function Home() {
   );
 
   //
-
-  //
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
   };
@@ -56,8 +53,8 @@ export default function Home() {
   };
 
   //
-  const fetchPizzas = async () => {
-    setIsLoading(true);
+  const getPizzas = async () => {
+    // setIsLoading(true);
 
     const category = categoryId > 0 ? `&category=${categoryId}` : "";
     const sortBy = sort.sortProperty.replace("-", ""); //
@@ -65,15 +62,9 @@ export default function Home() {
     const search = searchValue ? `&search=${searchValue}` : "";
 
     try {
-      const res = await axios.get(
-        `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?page=${currentPage}&limit=8&sortBy=${sortBy}&order=${order}${category}${search}`
-      );
-      // setPizzasArr(res.data);
-      dispatch(setItems(res.data));
+      dispatch(fetchPizzas({ category, sortBy, order, search, currentPage }));
     } catch (error) {
       console.error("Ошибка при запросе данных:", error);
-    } finally {
-      setIsLoading(false);
     }
 
     window.scrollTo(0, 0);
@@ -117,9 +108,9 @@ export default function Home() {
   //
   // 3 - Если был первый рендер, то запрашиваем пиццы
   useEffect(() => {
-    if (!isSearch.current) {
-      fetchPizzas();
-    }
+    // if (!isSearch.current) {
+    getPizzas();
+    // }
 
     isSearch.current = false;
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
@@ -157,11 +148,18 @@ export default function Home() {
           <h2 className="content__title">Все пиццы</h2>
           <Search />
         </div>
-        <div className="content__items">
-          {/*  */}
-          {isLoading ? skeletons : pizzas}
-          {/*  */}
-        </div>
+
+        {status === "error" ? (
+          <div className="content__error-info">
+            <h2>Произошла ошибка 😐</h2>
+            <p>Error - Error - Error</p>
+          </div>
+        ) : (
+          <div className="content__items">
+            {status === "loading" ? skeletons : pizzas}
+          </div>
+        )}
+
         <Pagination onChangePage={onChangePage} />
       </div>
     </>
