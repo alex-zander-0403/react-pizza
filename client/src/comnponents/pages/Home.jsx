@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef } from "react";
-import { SearchContext } from "../../App";
+import React, { useEffect, useRef } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
 import qs from "qs";
 //
@@ -22,13 +22,8 @@ import { fetchPizzas } from "../../redux/slices/pizzaSlice";
 //
 export default function Home() {
   //
-  // const [pizzasArr, setPizzasArr] = useState([]); // main массив пицц
   const { items, status } = useSelector((state) => state.pizzaSlice);
 
-  // const [isLoading, setIsLoading] = useState(true); // загрузка
-  // const [currentPage, setCurrentPage] = useState(1); // страница
-
-  const { searchValue } = useContext(SearchContext);
   const isMounted = useRef(false); // первый рендер еще не выполнен
   const isSearch = useRef(false);
 
@@ -39,7 +34,7 @@ export default function Home() {
 
   // const categoryId = useSelector((state) => state.filterSlice.categoryId);
   // const sortType = useSelector((state) => state.filterSlice.sort.sortProperty);
-  const { categoryId, sort, currentPage } = useSelector(
+  const { categoryId, sort, currentPage, searchValue } = useSelector(
     (state) => state.filterSlice
   );
 
@@ -151,8 +146,8 @@ export default function Home() {
 
         {status === "error" ? (
           <div className="content__error-info">
-            <h2>Произошла ошибка 😐</h2>
-            <p>Error - Error - Error</p>
+            <h2>Что то пошло не так 😐</h2>
+            <p>Мож ошибка? Глянь консоль..</p>
           </div>
         ) : (
           <div className="content__items">

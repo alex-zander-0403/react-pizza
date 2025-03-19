@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "../../redux/slices/cartSlice";
+import { addItem, selectCartItemById } from "../../redux/slices/cartSlice";
 
 //
 const typeNames = ["тонкое", "традиционное"];
@@ -16,8 +16,8 @@ export default function PizzaCard({ el }) {
   const dispatch = useDispatch();
 
   // находим item в с который el.id
-  const cartItem = useSelector((state) =>
-    state.cartSlice.items.find((obj) => obj.id === el.id)
+  const cartItem = useSelector(
+    selectCartItemById(el)
   );
   // проверка cartItem
   const addedItem = cartItem ? cartItem.count : 0;

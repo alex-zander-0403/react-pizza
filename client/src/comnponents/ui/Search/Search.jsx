@@ -1,16 +1,18 @@
-import React, { useCallback, useContext, useRef, useState } from "react";
-import { SearchContext } from "../../../App";
+import React, { useCallback, useRef, useState } from "react";
 import debounce from "lodash.debounce";
 //
 import styles from "./Search.module.scss";
+import { useDispatch } from "react-redux";
+import { setSearchValue } from "../../../redux/slices/filterSlice";
 
 //
 export default function Search() {
   //
-  const [localValue, setLocalValue] = useState("");
-  const { setSearchValue } = useContext(SearchContext);
-
+  const dispatch = useDispatch();
   const inputRef = useRef();
+
+  const [localValue, setLocalValue] = useState("");
+
 
   // при изменении input меняем значение локально
   const onChangeInput = (event) => {
@@ -22,7 +24,7 @@ export default function Search() {
   // localValue передаем в main searchValue
   const updateSearchValue = useCallback(
     debounce((searchStr) => {
-      setSearchValue(searchStr);
+      dispatch(setSearchValue(searchStr));
     }, 1000),
     []
   );

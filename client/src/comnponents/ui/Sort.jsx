@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setSort } from "../../redux/slices/filterSlice";
+import { selectSort, setSort } from "../../redux/slices/filterSlice";
 
 //
 //
@@ -18,7 +18,9 @@ export const sortList = [
 export default function Sort() {
   //
   const dispatch = useDispatch();
-  const sort = useSelector((state) => state.filterSlice.sort);
+
+  // const sort = useSelector((state) => state.filterSlice.sort);
+  const sort = useSelector(selectSort); 
 
   //
   const [openSort, setOpenSort] = useState(false); // popup меню вкл/выкл
@@ -29,7 +31,7 @@ export default function Sort() {
   // функция по клику на элемент списка
   const onClickListElement = (obj) => {
     dispatch(setSort(obj));
-    setOpenSort(false); 
+    setOpenSort(false);
   };
 
   //
