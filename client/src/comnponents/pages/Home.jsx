@@ -15,7 +15,7 @@ import PizzaCard from "../ui/PizzaCard";
 import PizzaCardSkeleton from "../ui/PizzaCardSkeleton";
 import Search from "../ui/Search/Search";
 import Pagination from "../Pagination/Pagination";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchPizzas } from "../../redux/slices/pizzaSlice";
 
 //
@@ -118,7 +118,11 @@ export default function Home() {
       }
       return false;
     })
-    .map((el) => <PizzaCard key={el.id} el={el} />);
+    .map((el) => (
+      <Link to={`/pizza/${el.id}`} key={el.id}>
+        <PizzaCard el={el} />
+      </Link>
+    ));
 
   //
   const skeletons = [...new Array(9)].map((el, i) => (

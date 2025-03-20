@@ -1,0 +1,50 @@
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
+//
+function FullPizza() {
+  //
+  const [pizza, setPizza] = useState({});
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  //
+  useEffect(() => {
+    //
+    async function getFullPizza() {
+      try {
+        const res = await axios.get(
+          "https://67c6fc1ec19eb8753e78293c.mockapi.io/items/" + id
+        );
+        setPizza(res.data);
+      } catch (error) {
+        console.log(`Ошибка получения информации о пицце ${id}`, error);
+        navigate("/");
+      }
+    }
+    //
+    getFullPizza();
+    //
+  }, []);
+
+  //
+  if (!pizza) {
+    return "Загрузка...";
+  }
+
+  //
+  return (
+    <>
+      <div className="container">
+        <img src={pizza.imageUrl} alt="pizza" />
+        <h1>{pizza.title}</h1>
+        <h2>Цена: {pizza.price} руб</h2>
+        <p>Рейтинг: {pizza.rating}</p>
+      </div>
+    </>
+  );
+}
+
+export default FullPizza;

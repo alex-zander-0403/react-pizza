@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 //
 // useSelector == useContext
@@ -6,35 +6,27 @@ import { Routes, Route } from "react-router-dom";
 // import { useSelector, useDispatch } from 'react-redux'
 // import { decrement, increment } from './counterSlice'
 //
-import Header from "./comnponents/ui/Header";
+import "./scss/app.scss";
+//
+import MainLayout from "./layouts/MainLayout";
 import Home from "./comnponents/pages/Home";
 import Cart from "./comnponents/pages/Cart";
 import NotFound from "./comnponents/pages/NotFound";
-//
-import "./scss/app.scss";
+import FullPizza from "./comnponents/pages/FullPizza";
 
-//
-// создание контекста
-// export const SearchContext = createContext({});
-
-//
 //
 function App() {
   //
-  // const [searchValue, setSearchValue] = useState("");
-
-  //
   return (
-    <div className="wrapper">
-      <Header />
-      <div className="content">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-    </div>
+    //
+    <Routes>
+      <Route path="/" element={<MainLayout />}>
+        <Route path="" element={<Home />} />
+        <Route path="cart" element={<Cart />} />
+        <Route path="pizza/:id" element={<FullPizza />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }
 
