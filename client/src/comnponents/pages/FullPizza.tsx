@@ -1,11 +1,16 @@
+import React, { JSX, useEffect, useState } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 //
-function FullPizza() {
+function FullPizza(): JSX.Element {
   //
-  const [pizza, setPizza] = useState({});
+  const [pizza, setPizza] = useState<{
+    imageUrl: string;
+    title: string;
+    price: number;
+    rating: number;
+  }>();
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -27,11 +32,11 @@ function FullPizza() {
     //
     getFullPizza();
     //
-  }, []);
+  }, [id]);
 
   //
   if (!pizza) {
-    return "Загрузка...";
+    return <div>Загрузка...</div>;
   }
 
   //
