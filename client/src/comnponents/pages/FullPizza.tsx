@@ -1,9 +1,9 @@
-import React, { JSX, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 //
-function FullPizza(): JSX.Element {
+const FullPizza: FC = () => {
   //
   const [pizza, setPizza] = useState<{
     imageUrl: string;
@@ -50,6 +50,6 @@ function FullPizza(): JSX.Element {
       </div>
     </>
   );
-}
+};
 
 export default FullPizza;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { JSX, useEffect, useRef } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import qs from "qs";
@@ -15,12 +15,12 @@ import PizzaCard from "../ui/PizzaCard";
 import PizzaCardSkeleton from "../ui/PizzaCardSkeleton";
 import Search from "../ui/Search/Search";
 import Pagination from "../Pagination/Pagination";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchPizzas } from "../../redux/slices/pizzaSlice";
 
 //
 //
-export default function Home() {
+function Home(): JSX.Element {
   //
   const { items, status } = useSelector((state) => state.pizzaSlice);
 
@@ -39,11 +39,11 @@ export default function Home() {
   );
 
   //
-  const onChangeCategory = (id) => {
-    dispatch(setCategoryId(id));
+  const onChangeCategory = (index: number) => {
+    dispatch(setCategoryId(index));
   };
 
-  const onChangePage = (num) => {
+  const onChangePage = (num: number) => {
     dispatch(setCurrentPage(num));
   };
 
@@ -57,6 +57,7 @@ export default function Home() {
     const search = searchValue ? `&search=${searchValue}` : "";
 
     try {
+      // @ts-ignore
       dispatch(fetchPizzas({ category, sortBy, order, search, currentPage }));
     } catch (error) {
       console.error("Ошибка при запросе данных:", error);
@@ -112,17 +113,13 @@ export default function Home() {
 
   //
   const pizzas = items
-    .filter((el) => {
+    .filter((el: any) => {
       if (el.title.toLowerCase().includes(searchValue.toLowerCase())) {
         return true;
       }
       return false;
     })
-    .map((el) => (
-      <Link to={`/pizza/${el.id}`} key={el.id}>
-        <PizzaCard el={el} />
-      </Link>
-    ));
+    .map((el: any) => <PizzaCard {...el} />);
 
   //
   const skeletons = [...new Array(9)].map((el, i) => (
@@ -164,3 +161,5 @@ export default function Home() {
     </>
   );
 }
+
+export default Home;

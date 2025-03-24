@@ -1,9 +1,16 @@
-import React from "react";
+import React, { JSX } from "react";
 import ReactPaginate from "react-paginate";
 //
 import styles from "./Pagination.module.scss";
 
-function Pagination({ onChangePage }) {
+//
+type PaginationPropsType = {
+  onChangePage: any;
+};
+
+//
+function Pagination({ onChangePage }: PaginationPropsType): JSX.Element {
+  //
   return (
     <ReactPaginate
       className={styles.root}
@@ -13,7 +20,7 @@ function Pagination({ onChangePage }) {
       pageRangeDisplayed={8}
       pageCount={3}
       previousLabel="<"
-      renderOnZeroPageCount={null}
+      // renderOnZeroPageCount={null}
     />
   );
 }

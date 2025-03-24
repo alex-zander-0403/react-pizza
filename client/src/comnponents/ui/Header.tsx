@@ -1,16 +1,20 @@
-import React from "react";
+import React, { JSX } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 //
-import logoSvg from "../../assets/img/pizza-logo.svg";
 import { selectCart } from "../../redux/slices/cartSlice";
+import logoSvg from "../../assets/img/pizza-logo.svg";
 
 //
 //
-export default function Header() {
+export default function Header():JSX.Element {
   //
   const { totalPrice, items } = useSelector(selectCart);
-  const totalCount = items.reduce((sum, item) => sum + item.count, 0);
+
+  const totalCount = items.reduce(
+    (sum: number, item: any) => sum + item.count,
+    0
+  );
 
   // const pathname = window.location.pathname;
   // console.log(pathname);

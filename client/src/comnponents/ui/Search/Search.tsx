@@ -9,13 +9,12 @@ import { setSearchValue } from "../../../redux/slices/filterSlice";
 export default function Search() {
   //
   const dispatch = useDispatch();
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [localValue, setLocalValue] = useState("");
 
-
   // при изменении input меняем значение локально
-  const onChangeInput = (event) => {
+  const onChangeInput = (event: any) => {
     const searchStr = event.target.value;
     setLocalValue(searchStr);
     updateSearchValue(searchStr);
@@ -23,7 +22,7 @@ export default function Search() {
 
   // localValue передаем в main searchValue
   const updateSearchValue = useCallback(
-    debounce((searchStr) => {
+    debounce((searchStr: string) => {
       dispatch(setSearchValue(searchStr));
     }, 1000),
     []
@@ -33,7 +32,13 @@ export default function Search() {
   const onClickClear = () => {
     setSearchValue("");
     setLocalValue("");
-    inputRef.current.focus();
+    // inputRef.current.focus();
+    // ->
+    // if (inputRef.current) {
+    //   inputRef.current.focus();
+    // }
+    // or
+    inputRef.current?.focus();
   };
 
   //

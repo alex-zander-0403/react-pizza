@@ -4,7 +4,6 @@ import { Routes, Route } from "react-router-dom";
 // useSelector == useContext
 // useDispatch == сделай action
 // import { useSelector, useDispatch } from 'react-redux'
-// import { decrement, increment } from './counterSlice'
 //
 import "./scss/app.scss";
 //

@@ -1,24 +1,43 @@
-import React, { useState } from "react";
+import React, { JSX, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, selectCartItemById } from "../../redux/slices/cartSlice";
+import { Link } from "react-router-dom";
+
+//
+type PizzaCardPropsType = {
+  id: string;
+  imageUrl: string;
+  title: string;
+  types: number[];
+  sizes: number[];
+  price: number;
+  category: number;
+  rating: number;
+};
 
 //
 const typeNames = ["тонкое", "традиционное"];
 
 //
-export default function PizzaCard({ el }) {
+function PizzaCard({
+  id,
+  imageUrl,
+  title,
+  types,
+  sizes,
+  price,
+  category,
+  rating,
+}: PizzaCardPropsType): JSX.Element {
   //
-  // const [pizzaCount, setPizzaCount] = useState(0); // состояние количества пицц
-  const [activeType, setActiveType] = useState(0);
-  const [activeSize, setActiveSize] = useState(0);
+  const [activeSize, setActiveSize] = useState<number>(0);
+  const [activeType, setActiveType] = useState<number>(0);
 
   //
   const dispatch = useDispatch();
 
   // находим item в с который el.id
-  const cartItem = useSelector(
-    selectCartItemById(el)
-  );
+  const cartItem = useSelector(selectCartItemById(id));
   // проверка cartItem
   const addedItem = cartItem ? cartItem.count : 0;
 
@@ -26,12 +45,12 @@ export default function PizzaCard({ el }) {
   const onClickAdd = () => {
     // const item = { ...el, type: activeType, size: activeSize };
     const item = {
-      id: el.id,
-      title: el.title,
-      imageUrl: el.imageUrl,
-      price: el.price,
+      id: id,
+      title: title,
+      imageUrl: imageUrl,
+      price: price,
       type: typeNames[activeType],
-      size: el.sizes[activeSize],
+      size: sizes[activeSize],
     };
     dispatch(addItem(item));
   };
@@ -40,12 +59,14 @@ export default function PizzaCard({ el }) {
   return (
     <div className="pizza-card-wrapper">
       <div className="pizza-card">
-        <img className="pizza-card__image" src={el.imageUrl} alt="Pizza" />
-        <h4 className="pizza-card__title">{el.title}</h4>
+        <Link to={`/pizza/${id}`} key={id}>
+          <img className="pizza-card__image" src={imageUrl} alt="Pizza" />
+        </Link>
+        <h4 className="pizza-card__title">{title}</h4>
         <div className="pizza-card__selector">
           {/*  */}
           <ul>
-            {el.types.map((type, i) => (
+            {types.map((type, i) => (
               <li
                 className={activeType === i ? "active" : ""}
                 key={i}
@@ -57,7 +78,7 @@ export default function PizzaCard({ el }) {
           </ul>
           {/*  */}
           <ul>
-            {el.sizes.map((size, i) => (
+            {sizes.map((size, i) => (
               <li
                 className={activeSize === i ? "active" : ""}
                 key={i}
@@ -70,7 +91,7 @@ export default function PizzaCard({ el }) {
           {/*  */}
         </div>
         <div className="pizza-card__bottom">
-          <div className="pizza-card__price">от {el.price} ₽</div>
+          <div className="pizza-card__price">от {price} ₽</div>
           <button
             onClick={onClickAdd}
             className="button button--outline button--add"
@@ -95,3 +116,5 @@ export default function PizzaCard({ el }) {
     </div>
   );
 }
+
+export default PizzaCard;

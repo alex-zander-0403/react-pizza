@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -7,7 +7,7 @@ import CartItem from "../ui/CartItem";
 import CartEmpty from "../ui/CartEmpty";
 
 //
-export default function Cart() {
+export default function Cart(): JSX.Element {
   //
   const dispatch = useDispatch();
 
@@ -19,7 +19,10 @@ export default function Cart() {
 
   //
   const { items, totalPrice } = useSelector(selectCart);
-  const totalCount = items.reduce((sum, item) => sum + item.count, 0);
+  const totalCount = items.reduce(
+    (sum: number, item: any) => sum + item.count,
+    0
+  );
 
   //
   if (!totalCount) {
@@ -106,7 +109,7 @@ export default function Cart() {
         </div>
         <div className="content__items">
           {/*  */}
-          {items.map((item) => (
+          {items.map((item: any) => (
             <CartItem key={item.id} {...item} />
           ))}
           {/*  */}

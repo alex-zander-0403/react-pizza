@@ -1,7 +1,7 @@
-import React from "react";
+import React, { JSX } from "react";
 import ContentLoader from "react-content-loader";
 
-const PizzaCardSkeleton = (props) => (
+const PizzaCardSkeleton = (): JSX.Element => (
   <ContentLoader
     className="pizza-card"
     speed={2}
@@ -10,7 +10,6 @@ const PizzaCardSkeleton = (props) => (
     viewBox="0 0 280 465"
     backgroundColor="#f3f3f3"
     foregroundColor="#ecebeb"
-    {...props}
   >
     <circle cx="140" cy="140" r="125" />
     <rect x="0" y="285" rx="10" ry="10" width="280" height="20" />

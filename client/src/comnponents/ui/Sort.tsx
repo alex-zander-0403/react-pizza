@@ -1,10 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { JSX, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSort, setSort } from "../../redux/slices/filterSlice";
 
+// ---------------------------------------------------------------------
 //
+type SortItemType = {
+  name: string;
+  sortProperty: string;
+};
+
 //
-export const sortList = [
+export const sortList: SortItemType[] = [
   { name: "популярности (убывание)", sortProperty: "-rating" },
   { name: "популярности (возрастание)", sortProperty: "rating" },
   { name: "цене (убывание)", sortProperty: "-price" },
@@ -13,23 +19,21 @@ export const sortList = [
   { name: "алфавиту (возрастание)", sortProperty: "title" },
 ]; // список элементов списка сортировки
 
+// ---------------------------------------------------------------------
 //
-//
-export default function Sort() {
+export default function Sort():JSX.Element {
   //
   const dispatch = useDispatch();
 
   // const sort = useSelector((state) => state.filterSlice.sort);
-  const sort = useSelector(selectSort); 
-
-  //
+  const sort = useSelector(selectSort);
   const [openSort, setOpenSort] = useState(false); // popup меню вкл/выкл
-  const sortRef = useRef();
+  const sortRef = useRef<HTMLDivElement>(null);
 
   // const chosenType = sortList[sortType].name; // актуальная сортировка
 
   // функция по клику на элемент списка
-  const onClickListElement = (obj) => {
+  const onClickListElement = (obj: SortItemType) => {
     dispatch(setSort(obj));
     setOpenSort(false);
   };
@@ -37,7 +41,7 @@ export default function Sort() {
   //
   useEffect(() => {
     // закрыть popup окно по клику мимо
-    const onClickOutside = (event) => {
+    const onClickOutside = (event: any) => {
       if (!event.composedPath().includes(sortRef.current)) {
         setOpenSort(false);
       }
@@ -67,7 +71,7 @@ export default function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpenSort(!openSort)}>{sort.name}</span> {/*  */}
+        <span onClick={() => setOpenSort(!openSort)}>{sort.name}</span>
       </div>
       {openSort && (
         <div className="sort__popup">
