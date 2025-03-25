@@ -21,7 +21,7 @@ export const sortList: SortItemType[] = [
 
 // ---------------------------------------------------------------------
 //
-export default function Sort():JSX.Element {
+export default function Sort(): JSX.Element {
   //
   const dispatch = useDispatch();
 
@@ -41,18 +41,17 @@ export default function Sort():JSX.Element {
   //
   useEffect(() => {
     // закрыть popup окно по клику мимо
-    const onClickOutside = (event: any) => {
-      if (!event.composedPath().includes(sortRef.current)) {
+    const onClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
         setOpenSort(false);
       }
     };
     // mount onClickOutside
     document.body.addEventListener("click", onClickOutside);
     // unmount onClickOutside
-    return () => {
-      document.body.removeEventListener("click", onClickOutside);
-    };
+    return () => document.body.removeEventListener("click", onClickOutside);
   }, []);
+
 
   //
   return (

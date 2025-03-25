@@ -1,13 +1,13 @@
-import React, { FC } from "react";
+import React, { JSX } from "react";
 
 //
-type CategoriesProps = {
+type CategoriesPropsType = {
   categoryId: number;
-  onChangeCategory: any;
+  onChangeCategory: (arg: number) => void;
 };
 
 //
-const Categories: FC<CategoriesProps> = ({ categoryId, onChangeCategory }) => {
+function Categories({ categoryId, onChangeCategory }: CategoriesPropsType): JSX.Element {
   //
   const categories = [
     "Все",
@@ -34,6 +34,6 @@ const Categories: FC<CategoriesProps> = ({ categoryId, onChangeCategory }) => {
       </ul>
     </div>
   );
-};
+}
 
 export default Categories;

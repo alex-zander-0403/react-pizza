@@ -1,4 +1,11 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, {
+  JSX,
+  ChangeEvent,
+  MouseEvent,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import debounce from "lodash.debounce";
 //
 import styles from "./Search.module.scss";
@@ -6,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { setSearchValue } from "../../../redux/slices/filterSlice";
 
 //
-export default function Search() {
+function Search(): JSX.Element {
   //
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -14,7 +21,7 @@ export default function Search() {
   const [localValue, setLocalValue] = useState("");
 
   // при изменении input меняем значение локально
-  const onChangeInput = (event: any) => {
+  const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     const searchStr = event.target.value;
     setLocalValue(searchStr);
     updateSearchValue(searchStr);
@@ -29,7 +36,7 @@ export default function Search() {
   );
 
   // очистка поиска
-  const onClickClear = () => {
+  const onClickClear = (event: MouseEvent<SVGSVGElement>) => {
     setSearchValue("");
     setLocalValue("");
     // inputRef.current.focus();
@@ -63,31 +70,29 @@ export default function Search() {
         ref={inputRef}
         className={styles.input}
         value={localValue}
-        // onChange={(event) => setSearchValue(event.target.value)}
         onChange={onChangeInput}
         placeholder="поиск"
       />
       {localValue && (
-        <div className={styles.clear} onClick={onClickClear}>
-          <svg
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <line x1="18" x2="6" y1="6" y2="18" />
-            <line x1="6" x2="18" y1="6" y2="18" />
-          </svg>
-        </div>
+        <svg
+          className={styles.clear}
+          onClick={onClickClear}
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <line x1="18" x2="6" y1="6" y2="18" />
+          <line x1="6" x2="18" y1="6" y2="18" />
+        </svg>
       )}
     </div>
   );
 }
 
-//
-// export default Search;
+export default Search;

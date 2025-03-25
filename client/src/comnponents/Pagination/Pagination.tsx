@@ -5,7 +5,7 @@ import styles from "./Pagination.module.scss";
 
 //
 type PaginationPropsType = {
-  onChangePage: any;
+  onChangePage: (page: number) => void;
 };
 
 //
