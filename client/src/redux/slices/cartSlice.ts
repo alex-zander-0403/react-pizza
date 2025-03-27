@@ -1,15 +1,34 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
-const initialState = {
+//
+export type CartItemType = {
+  id: string;
+  title: string;
+  imageUrl: string;
+  price: number;
+  type: string;
+  size: number;
+  count: number;
+};
+
+interface InitialStateType {
+  totalPrice: number;
+  items: CartItemType[];
+}
+
+//
+const initialState: InitialStateType = {
   items: [],
   totalPrice: 0,
 };
 
+//
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addItem(state, action) {
+    addItem(state, action: PayloadAction<CartItemType>) {
       const findItem = state.items.find((obj) => obj.id === action.payload.id);
       if (findItem) {
         findItem.count++;
@@ -20,19 +39,19 @@ const cartSlice = createSlice({
         return obj.price * obj.count + sum;
       }, 0);
     },
-    plusItem(state, action) {
+    plusItem(state, action: PayloadAction<string>) {
       const findItem = state.items.find((obj) => obj.id === action.payload);
       if (findItem) {
         findItem.count++;
       }
     },
-    minusItem(state, action) {
+    minusItem(state, action: PayloadAction<string>) {
       const findItem = state.items.find((obj) => obj.id === action.payload);
       if (findItem) {
         findItem.count--;
       }
     },
-    removeItem(state, action) {
+    removeItem(state, action: PayloadAction<string>) {
       state.items = state.items.filter((obj) => obj.id !== action.payload);
     },
     clearItems(state) {
@@ -43,11 +62,12 @@ const cartSlice = createSlice({
 });
 
 // селекторы
-export const selectCart = (state) => state.cartSlice;
+export const selectCart = (state: RootState) => state.cartSlice;
 
-export const selectCartItemById = (id) => (state) =>
+export const selectCartItemById = (id: string) => (state: RootState) =>
   state.cartSlice.items.find((obj) => obj.id === id);
 
+//
 export const { addItem, removeItem, clearItems, plusItem, minusItem } =
   cartSlice.actions; // Экспортируем addItem
 export default cartSlice.reducer;

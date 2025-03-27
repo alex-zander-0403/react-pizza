@@ -10,3 +10,6 @@ export const store = configureStore({
     pizzaSlice,
   },
 });
+
+// определение типа структуры всего состояния хранилища Redux на основе созданного store
+export type RootState = ReturnType<typeof store.getState>;

@@ -1,6 +1,10 @@
 import React, { JSX, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, selectCartItemById } from "../../redux/slices/cartSlice";
+import {
+  addItem,
+  CartItemType,
+  selectCartItemById,
+} from "../../redux/slices/cartSlice";
 import { Link } from "react-router-dom";
 
 //
@@ -43,14 +47,14 @@ function PizzaCard({
 
   //
   const onClickAdd = () => {
-    // const item = { ...el, type: activeType, size: activeSize };
-    const item = {
-      id: id,
-      title: title,
-      imageUrl: imageUrl,
-      price: price,
+    const item: CartItemType = {
+      id,
+      title,
+      imageUrl,
+      price,
       type: typeNames[activeType],
       size: sizes[activeSize],
+      count: 0, // опционально
     };
     dispatch(addItem(item));
   };

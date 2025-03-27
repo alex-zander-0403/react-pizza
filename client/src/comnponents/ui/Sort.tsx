@@ -1,16 +1,17 @@
 import React, { JSX, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSort, setSort } from "../../redux/slices/filterSlice";
+import { selectSort, setSort, SortType } from "../../redux/slices/filterSlice";
 
 // ---------------------------------------------------------------------
-//
-type SortItemType = {
-  name: string;
-  sortProperty: string;
-};
+
+// заменен на SortType из filterSlice
+// type SortItemType = {
+//   name: string;
+//   sortProperty: "rating" | "title" | "price" | "-rating" | "-title" | "-price";
+// };
 
 //
-export const sortList: SortItemType[] = [
+export const sortList: SortType[] = [
   { name: "популярности (убывание)", sortProperty: "-rating" },
   { name: "популярности (возрастание)", sortProperty: "rating" },
   { name: "цене (убывание)", sortProperty: "-price" },
@@ -33,7 +34,7 @@ export default function Sort(): JSX.Element {
   // const chosenType = sortList[sortType].name; // актуальная сортировка
 
   // функция по клику на элемент списка
-  const onClickListElement = (obj: SortItemType) => {
+  const onClickListElement = (obj: SortType) => {
     dispatch(setSort(obj));
     setOpenSort(false);
   };
