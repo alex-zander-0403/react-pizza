@@ -1,23 +1,34 @@
 import React, { JSX, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSort, setSort, SortType } from "../../redux/slices/filterSlice";
+import {
+  selectSort,
+  setSort,
+  SortPropertyEnum,
+  SortType,
+} from "../../redux/slices/filterSlice";
 
 // ---------------------------------------------------------------------
 
 // заменен на SortType из filterSlice
-// type SortItemType = {
-//   name: string;
-//   sortProperty: "rating" | "title" | "price" | "-rating" | "-title" | "-price";
-// };
+type SortItemType = {
+  name: string;
+  sortProperty: SortPropertyEnum;
+};
 
 //
 export const sortList: SortType[] = [
-  { name: "популярности (убывание)", sortProperty: "-rating" },
-  { name: "популярности (возрастание)", sortProperty: "rating" },
-  { name: "цене (убывание)", sortProperty: "-price" },
-  { name: "цене (возрастание)", sortProperty: "price" },
-  { name: "алфавиту (убывание)", sortProperty: "-title" },
-  { name: "алфавиту (возрастание)", sortProperty: "title" },
+  {
+    name: "популярности (убывание)",
+    sortProperty: SortPropertyEnum.RATING_DESC,
+  },
+  {
+    name: "популярности (возрастание)",
+    sortProperty: SortPropertyEnum.RATING_ASC,
+  },
+  { name: "цене (убывание)", sortProperty: SortPropertyEnum.PRICE_DESC },
+  { name: "цене (возрастание)", sortProperty: SortPropertyEnum.PRICE_ASC },
+  { name: "алфавиту (убывание)", sortProperty: SortPropertyEnum.TITLE_DESC },
+  { name: "алфавиту (возрастание)", sortProperty: SortPropertyEnum.TITLE_ASC },
 ]; // список элементов списка сортировки
 
 // ---------------------------------------------------------------------
@@ -52,7 +63,6 @@ export default function Sort(): JSX.Element {
     // unmount onClickOutside
     return () => document.body.removeEventListener("click", onClickOutside);
   }, []);
-
 
   //
   return (

@@ -1,7 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { RootState } from "../store";
+import { SortType } from "./filterSlice";
 
 //
+export enum Status {
+  LOADING = "loading",
+  SUCCESS = "success",
+  ERROR = "error",
+}
+
 type pizzaItemType = {
   id: string;
   imageUrl: string;
@@ -15,24 +23,25 @@ type pizzaItemType = {
 
 interface initialStateType {
   items: pizzaItemType[];
-  status: "loading" | "success" | "error";
+  status: Status;
 }
 
 //
-// type fetchPizzasArgsType = {
-//   category: string;
-//   sortBy: string;
-//   order: string;
-//   search: string;
-//   currentPage: string;
-// };
-// или
-type fetchPizzasArgsType = Record<string, string>;
+// type fetchPizzasArgsType = Record<string, string>;
+
+export type searchPizzasParams = {
+  sortBy: string;
+  category: string;
+  order: string;
+  search: string;
+  currentPage: string;
+};
 
 // asyncThunk
+// export const fetchPizzas = createAsyncThunk<pizzaItemType[], Record<string, string>>(
 export const fetchPizzas = createAsyncThunk(
   "pizza/fetchPizzasStatus",
-  async (params: fetchPizzasArgsType) => {
+  async (params: searchPizzasParams) => {
     const { category, sortBy, order, search, currentPage } = params;
     const res = await axios.get<pizzaItemType[]>(
       `https://67c6fc1ec19eb8753e78293c.mockapi.io/items?page=${currentPage}&limit=8&sortBy=${sortBy}&order=${order}${category}${search}`
@@ -41,14 +50,10 @@ export const fetchPizzas = createAsyncThunk(
   }
 );
 
-
-
-
-
 //
 const initialState: initialStateType = {
   items: [],
-  status: "loading", // loading | success | error
+  status: Status.LOADING, // loading | success | error
 };
 
 const pizzaSlice = createSlice({
@@ -64,20 +69,23 @@ const pizzaSlice = createSlice({
       .addCase(fetchPizzas.pending, (state) => {
         // console.log("загрузка");
         state.items = [];
-        state.status = "loading";
+        state.status = Status.LOADING;
       })
       .addCase(fetchPizzas.fulfilled, (state, action) => {
         // console.log("OK", state);
         state.items = action.payload;
-        state.status = "success";
+        state.status = Status.SUCCESS;
       })
       .addCase(fetchPizzas.rejected, (state) => {
         // console.log("ошибка");
         state.items = [];
-        state.status = "error";
+        state.status = Status.ERROR;
       });
   },
 });
+
+// export const selectSort = (state: RootState) => state.filterSlice.sort;
+export const selectPizza = (state: RootState) => state.pizzaSlice;
 
 export const { setItems } = pizzaSlice.actions;
 export default pizzaSlice.reducer;

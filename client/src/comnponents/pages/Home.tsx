@@ -1,9 +1,10 @@
 import React, { JSX, useEffect, useRef } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import qs from "qs";
 //
 import {
+  selectFilter,
   setCategoryId,
   setCurrentPage,
   setFilters,
@@ -16,27 +17,31 @@ import PizzaCardSkeleton from "../ui/PizzaCardSkeleton";
 import Search from "../ui/Search/Search";
 import Pagination from "../Pagination/Pagination";
 import { useNavigate } from "react-router-dom";
-import { fetchPizzas } from "../../redux/slices/pizzaSlice";
+import {
+  fetchPizzas,
+  searchPizzasParams,
+  selectPizza,
+} from "../../redux/slices/pizzaSlice";
+import { useAppDispatch } from "../../redux/store";
 
 //
 //
 function Home(): JSX.Element {
   //
-  const { items, status } = useSelector((state) => state.pizzaSlice);
+  const { items, status } = useSelector(selectPizza);
 
   const isMounted = useRef(false); // первый рендер еще не выполнен
   const isSearch = useRef(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   // --------------------------------------
 
   // const categoryId = useSelector((state) => state.filterSlice.categoryId);
   // const sortType = useSelector((state) => state.filterSlice.sort.sortProperty);
-  const { categoryId, sort, currentPage, searchValue } = useSelector(
-    (state) => state.filterSlice
-  );
+  const { categoryId, sort, currentPage, searchValue } =
+    useSelector(selectFilter);
 
   //
   const onChangeCategory = (index: number) => {
@@ -57,8 +62,15 @@ function Home(): JSX.Element {
     const search = searchValue ? `&search=${searchValue}` : "";
 
     try {
-      // @ts-ignore
-      dispatch(fetchPizzas({ category, sortBy, order, search, currentPage }));
+      dispatch(
+        fetchPizzas({
+          category,
+          sortBy,
+          order,
+          search,
+          currentPage: String(currentPage),
+        })
+      );
     } catch (error) {
       console.error("Ошибка при запросе данных:", error);
     }
@@ -82,21 +94,23 @@ function Home(): JSX.Element {
   }, [categoryId, sort.sortProperty, currentPage]);
 
   //
-  // 2 - Если был первый рендер, то проверяем URl-параметры и сохраняем в редуксе
+  // 2 - Если был первый рендер, то проверяем URl-параметры и сохраняем в редаксе
   useEffect(() => {
     if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-
-      const sort = sortList.find(
-        (obj) => obj.sortProperty === params.sortProperty
-      );
+      const params = qs.parse(
+        window.location.search.substring(1)
+      ) as unknown as searchPizzasParams;
+      const sort = sortList.find((obj) => obj.sortProperty === params.sortBy);
 
       dispatch(
         setFilters({
-          ...params,
-          sort,
+          searchValue: params.search,
+          categoryId: Number(params.category),
+          currentPage: Number(params.currentPage),
+          sort: sort || sortList[0],
         })
       );
+
       isSearch.current = true;
     }
   }, []);
