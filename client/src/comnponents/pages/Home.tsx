@@ -1,14 +1,9 @@
-import React, { JSX, useEffect, useRef } from "react";
+import React, { JSX, useCallback, useEffect, useRef } from "react";
 
 import { useSelector } from "react-redux";
 import qs from "qs";
 //
-import {
-  selectFilter,
-  setCategoryId,
-  setCurrentPage,
-  setFilters,
-} from "../../redux/slices/filterSlice";
+import { selectFilter, setCategoryId, setCurrentPage, setFilters } from "../../redux/slices/filterSlice";
 //
 import Categories from "../ui/Categories";
 import Sort, { sortList } from "../ui/Sort";
@@ -17,11 +12,7 @@ import PizzaCardSkeleton from "../ui/PizzaCardSkeleton";
 import Search from "../ui/Search/Search";
 import Pagination from "../Pagination/Pagination";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchPizzas,
-  searchPizzasParams,
-  selectPizza,
-} from "../../redux/slices/pizzaSlice";
+import { fetchPizzas, searchPizzasParams, selectPizza } from "../../redux/slices/pizzaSlice";
 import { useAppDispatch } from "../../redux/store";
 
 //
@@ -40,13 +31,13 @@ function Home(): JSX.Element {
 
   // const categoryId = useSelector((state) => state.filterSlice.categoryId);
   // const sortType = useSelector((state) => state.filterSlice.sort.sortProperty);
-  const { categoryId, sort, currentPage, searchValue } =
-    useSelector(selectFilter);
+  const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
 
   //
-  const onChangeCategory = (index: number) => {
+
+  const onChangeCategory = useCallback((index: number) => {
     dispatch(setCategoryId(index));
-  };
+  }, []);
 
   const onChangePage = (num: number) => {
     dispatch(setCurrentPage(num));
@@ -97,9 +88,7 @@ function Home(): JSX.Element {
   // 2 - Если был первый рендер, то проверяем URl-параметры и сохраняем в редаксе
   useEffect(() => {
     if (window.location.search) {
-      const params = qs.parse(
-        window.location.search.substring(1)
-      ) as unknown as searchPizzasParams;
+      const params = qs.parse(window.location.search.substring(1)) as unknown as searchPizzasParams;
       const sort = sortList.find((obj) => obj.sortProperty === params.sortBy);
 
       dispatch(
@@ -133,12 +122,10 @@ function Home(): JSX.Element {
       }
       return false;
     })
-    .map((el: any) => <PizzaCard {...el} />);
+    .map((el: any) => <PizzaCard {...el} key={el.id} />);
 
   //
-  const skeletons = [...new Array(9)].map((el, i) => (
-    <PizzaCardSkeleton key={i} />
-  ));
+  const skeletons = [...new Array(9)].map((el, i) => <PizzaCardSkeleton key={i} />);
 
   //
   return (
@@ -146,12 +133,9 @@ function Home(): JSX.Element {
       <div className="container">
         <div className="content__top">
           {/* ----- */}
-          <Categories
-            categoryId={categoryId}
-            onChangeCategory={onChangeCategory}
-          />
+          <Categories categoryId={categoryId} onChangeCategory={onChangeCategory} />
           {/* ----- */}
-          <Sort />
+          <Sort sort={sort} />
           {/* ----- */}
         </div>
         <div className="content__header">
@@ -161,13 +145,11 @@ function Home(): JSX.Element {
 
         {status === "error" ? (
           <div className="content__error-info">
-            <h2>Что то пошло не так 😐</h2>
+            <h2>Что-то пошло не так 😐</h2>
             <p>Мож ошибка? Глянь консоль..</p>
           </div>
         ) : (
-          <div className="content__items">
-            {status === "loading" ? skeletons : pizzas}
-          </div>
+          <div className="content__items">{status === "loading" ? skeletons : pizzas}</div>
         )}
 
         <Pagination onChangePage={onChangePage} />

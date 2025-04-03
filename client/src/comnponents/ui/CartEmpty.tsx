@@ -1,4 +1,4 @@
-import React, { FC, JSX } from "react";
+import React, { JSX } from "react";
 import { Link } from "react-router-dom";
 //
 import cartEmptyImg from "../../assets/img/empty-cart.png";
