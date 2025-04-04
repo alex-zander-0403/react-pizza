@@ -1,5 +1,5 @@
 import React, { JSX, memo } from "react";
-import { useWhyDidYouUpdate } from "ahooks";
+// import { useWhyDidYouUpdate } from "ahooks";
 
 //
 type CategoriesPropsType = {
@@ -11,7 +11,6 @@ const categories = ["Все", "Мясные", "Вегетарианская", "�
 
 //
 const Categories = memo(({ categoryId, onChangeCategory }: CategoriesPropsType): JSX.Element => {
-  useWhyDidYouUpdate("Categories", { categoryId, onChangeCategory });
 
   return (
     <div className="categories">
