@@ -1,16 +1,9 @@
-import React, {
-  JSX,
-  ChangeEvent,
-  MouseEvent,
-  useCallback,
-  useRef,
-  useState,
-} from "react";
+import React, { JSX, ChangeEvent, MouseEvent, useCallback, useRef, useState } from "react";
 import debounce from "lodash.debounce";
 //
 import styles from "./Search.module.scss";
 import { useDispatch } from "react-redux";
-import { setSearchValue } from "../../../redux/slices/filterSlice";
+import { setSearchValue } from "../../../redux/filter/filterSlice";
 
 //
 function Search(): JSX.Element {
@@ -46,6 +39,7 @@ function Search(): JSX.Element {
     // }
     // or
     inputRef.current?.focus();
+    dispatch(setSearchValue(""));
   };
 
   //
@@ -66,13 +60,7 @@ function Search(): JSX.Element {
         <circle cx="11" cy="11" r="8" />
         <line x1="21" x2="16.65" y1="21" y2="16.65" />
       </svg>
-      <input
-        ref={inputRef}
-        className={styles.input}
-        value={localValue}
-        onChange={onChangeInput}
-        placeholder="поиск"
-      />
+      <input ref={inputRef} className={styles.input} value={localValue} onChange={onChangeInput} placeholder="поиск" />
       {localValue && (
         <svg
           className={styles.clear}

@@ -1,14 +1,15 @@
 import React, { JSX, memo, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setSort, SortPropertyEnum, SortType } from "../../redux/slices/filterSlice";
+import { setSort } from "../../redux/filter/filterSlice";
+import { SortPropertyEnum, SortType } from "../../redux/filter/filterTypes";
 
 // ---------------------------------------------------------------------
 
 // заменен на SortType из filterSlice
-type SortItemType = {
-  name: string;
-  sortProperty: SortPropertyEnum;
-};
+// type SortItemType = {
+//   name: string;
+//   sortProperty: SortPropertyEnum;
+// };
 
 type SortPropsType = {
   sort: SortType;
