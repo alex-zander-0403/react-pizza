@@ -1,9 +1,10 @@
 import React, { JSX, useCallback, useEffect, useRef } from "react";
-
 import { useSelector } from "react-redux";
 import qs from "qs";
 //
 import { setCategoryId, setCurrentPage, setFilters } from "../../redux/filter/filterSlice";
+import { useAppDispatch } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
 //
 import Categories from "../ui/Categories";
 import Sort, { sortList } from "../ui/Sort";
@@ -11,8 +12,6 @@ import PizzaCard from "../ui/PizzaCard";
 import PizzaCardSkeleton from "../ui/PizzaCardSkeleton";
 import Search from "../ui/Search/Search";
 import Pagination from "../Pagination/Pagination";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../redux/store";
 import { selectPizza } from "../../redux/pizza/pizzaSelectors";
 import { searchPizzasParams } from "../../redux/pizza/pizzaTypes";
 import { selectFilter } from "../../redux/filter/filterSelectors";
