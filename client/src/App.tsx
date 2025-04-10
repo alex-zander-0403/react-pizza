@@ -4,10 +4,11 @@ import { Routes, Route } from "react-router-dom";
 import "./scss/app.scss";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./comnponents/pages/Home";
+import Loader from "./comnponents/ui/Loader/Loader";
 //
-const Cart = lazy(() => import(/* webpackChunkName: "CartChunk"*/ "./comnponents/pages/Cart"));
-const FullPizza = lazy(() => import(/* webpackChunkName: "FullPizzaChunk"*/ "./comnponents/pages/FullPizza"));
-const NotFound = lazy(() => import(/* webpackChunkName: "NotFoundChunk"*/ "./comnponents/pages/NotFound"));
+const Cart = lazy(() => import(/* webpackChunkName: "[CartChunk]"*/ "./comnponents/pages/Cart"));
+const FullPizza = lazy(() => import(/* webpackChunkName: "[FullPizzaChunk]"*/ "./comnponents/pages/FullPizza"));
+const NotFound = lazy(() => import(/* webpackChunkName: "[NotFoundChunk]"*/ "./comnponents/pages/NotFound"));
 
 //
 function App() {
@@ -20,7 +21,7 @@ function App() {
         <Route
           path="cart"
           element={
-            <Suspense fallback={<div>Загрузка...</div>}>
+            <Suspense fallback={<Loader />}>
               <Cart />
             </Suspense>
           }
@@ -28,7 +29,7 @@ function App() {
         <Route
           path="pizza/:id"
           element={
-            <Suspense fallback={<div>Загрузка...</div>}>
+            <Suspense fallback={<Loader />}>
               <FullPizza />
             </Suspense>
           }
@@ -36,7 +37,7 @@ function App() {
         <Route
           path="*"
           element={
-            <Suspense fallback={<div>Загрузка...</div>}>
+            <Suspense fallback={<Loader />}>
               <NotFound />
             </Suspense>
           }
